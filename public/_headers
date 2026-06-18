@@ -1,14 +1,28 @@
 # Cloudflare Pages reads this file from the deploy root and applies these
-# response headers. Restores the security headers that a static export can't
-# set via next.config, and long-caches immutable build assets.
+# response headers: security headers everywhere + a tuned caching strategy.
+# Rules are evaluated top-to-bottom; for a repeated header the last match wins,
+# so the specific asset rules below override the default Cache-Control.
 
+# ── Everything (HTML, sitemap, RSC payloads) ──
+# Instant repeat loads, but stays fresh: serve cached for up to 1h, then serve
+# stale instantly for up to a day while revalidating in the background.
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 
+# ── Content-hashed build assets — filename changes on every build, so cache
+#    them forever in the browser. This is the big speed win for repeat visits. ──
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable
 
+# ── Favicons (rarely change) ──
 /favicon/*
   Cache-Control: public, max-age=31536000, immutable
+
+# ── Brand images with stable filenames — cache 30 days ──
+/logo.webp
+  Cache-Control: public, max-age=2592000
+/og-image.webp
+  Cache-Control: public, max-age=2592000
