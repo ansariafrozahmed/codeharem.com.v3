@@ -1,0 +1,12 @@
+{
+  // Serve the static export in ./out as a Cloudflare Worker with Static Assets.
+  // No "main" worker script → this is an assets-only deploy (a static site).
+  // Having this config present also stops `wrangler deploy` from auto-running
+  // the OpenNext SSR adapter, which doesn't apply to an `output: 'export'` site.
+  "name": "codeharem",
+  "compatibility_date": "2026-06-18",
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}
