@@ -85,7 +85,7 @@ export const blogs: BlogData[] = [
       "frontend",
       "copy-paste",
     ],
-    featuredImage: null,
+    featuredImage: "https://cdn.codeharem.com/blogs/copy-paste-html-css-components.webp",
     faq: COPY_PASTE_FAQ,
     content: `Every frontend developer rebuilds the same things: a button with a tidy hover
 state, a loading spinner, a pricing card, a toggle. **Copy-paste HTML and CSS
