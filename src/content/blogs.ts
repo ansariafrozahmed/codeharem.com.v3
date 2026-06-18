@@ -2,13 +2,20 @@
 // Local blog content.
 //
 // Posts are plain data with Markdown bodies (rendered with react-markdown).
-// To add a post, append an object to the `blogs` array below.
+// Add an optional `faq` array to a post to emit FAQPage structured data
+// (the questions/answers should also appear in the Markdown body so the
+// visible content matches the schema, per Google's guidelines).
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface BlogAuthor {
   name: string;
   avatar: string | null;
   username: string | null;
+}
+
+export interface BlogFaqItem {
+  question: string;
+  answer: string;
 }
 
 export interface BlogData {
@@ -24,6 +31,7 @@ export interface BlogData {
   createdAt: string;
   updatedAt: string;
   author: BlogAuthor;
+  faq?: BlogFaqItem[];
 }
 
 export interface BlogListResult {
@@ -37,138 +45,160 @@ const TEAM: BlogAuthor = { name: "CodeHarem", avatar: null, username: null };
 
 export const BLOGS_PER_PAGE = 13;
 
+const COPY_PASTE_FAQ: BlogFaqItem[] = [
+  {
+    question: "Are the components on CodeHarem free to use?",
+    answer:
+      "Yes. Every HTML and CSS component on CodeHarem is free to copy, paste, and use in both personal and commercial projects.",
+  },
+  {
+    question: "Do I need React or any framework to use them?",
+    answer:
+      "No. The components are plain HTML and CSS, so they work in any project — static sites, React, Vue, WordPress, or anything that renders HTML.",
+  },
+  {
+    question: "What is the difference between the CSS and Tailwind versions?",
+    answer:
+      "Vanilla CSS components keep their styles in a stylesheet, while Tailwind CSS components use utility classes directly in the markup. Use whichever matches your project.",
+  },
+  {
+    question: "Can I edit a component before using it?",
+    answer:
+      "Yes. Open the CodeHarem sandbox to edit the HTML, CSS, and JavaScript live with an instant preview, then copy or download the standalone result.",
+  },
+];
+
 export const blogs: BlogData[] = [
-//   {
-//     id: "b1",
-//     slug: "why-we-went-fully-static",
-//     title: "Why We Rebuilt CodeHarem as a Fully Static Site",
-//     excerpt:
-//       "No backend, no database, no auth — just fast, cacheable HTML. Here's why a static architecture is a great fit for a component gallery.",
-//     category: "engineering",
-//     tags: ["nextjs", "static", "performance"],
-//     featuredImage: null,
-//     content: `Static sites are having a moment, and for good reason. When your content
-// doesn't change per-request, there is no reason to pay for a server to render it
-// every time.
+  {
+    id: "copy-paste-html-css-components",
+    slug: "copy-paste-html-css-components",
+    title:
+      "Copy-Paste HTML & CSS Components: Build UI Faster Without a Framework",
+    excerpt:
+      "A practical guide to free, copy-paste HTML and CSS components — buttons, cards, loaders, and form controls — for shipping clean UI faster, with no framework and no build step.",
+    category: "guides",
+    tags: [
+      "css",
+      "ui-components",
+      "html",
+      "tailwind-css",
+      "frontend",
+      "copy-paste",
+    ],
+    featuredImage: null,
+    faq: COPY_PASTE_FAQ,
+    content: `Every frontend developer rebuilds the same things: a button with a tidy hover
+state, a loading spinner, a pricing card, a toggle. **Copy-paste HTML and CSS
+components** let you skip that busywork — grab a working snippet, drop it into
+any page, and move on.
 
-// ## What "static" means here
+This guide covers what copy-paste UI components are, when to reach for plain CSS
+versus Tailwind CSS, and how to use the free component library on CodeHarem to
+build interfaces faster.
 
-// Every page on CodeHarem is generated at build time into plain HTML, CSS, and
-// JavaScript. There is **no API call** at runtime to load a component or a blog
-// post — the data ships inside the page.
+## What is a copy-paste UI component?
 
-// ## Why it's a good fit
+A copy-paste UI component is a small, self-contained block of HTML and CSS — and
+sometimes a few lines of JavaScript — that renders a single piece of interface:
+a button, card, accordion, input, and so on. There is no install step, no
+package to add, and no framework to learn. You copy the markup, paste it into
+your project, and adjust the colours or spacing to match your design.
 
-// - **Speed** — pages are served straight from a CDN edge, often in milliseconds.
-// - **Reliability** — there is no database to fall over.
-// - **Cost** — static hosting is cheap (often free) and scales effortlessly.
-// - **Security** — no server means a dramatically smaller attack surface.
+Because every component on CodeHarem is plain **HTML and CSS**, it works in any
+stack — a static site, a React or Vue app, a WordPress theme, or a landing
+page. If a browser can render HTML, the component works.
 
-// ## The trade-offs
+## Plain CSS vs Tailwind CSS components
 
-// You give up per-user features like accounts and likes that persist across
-// devices. For a gallery you browse and copy from, that is a trade worth making.
+You will see two flavours of components in the wild, and CodeHarem supports
+both:
 
-// > Build once, serve everywhere.`,
-//     views: 1840,
-//     createdAt: "2025-05-25T10:00:00.000Z",
-//     updatedAt: "2025-05-25T10:00:00.000Z",
-//     author: TEAM,
-//   },
-//   {
-//     id: "b2",
-//     slug: "css-tricks-for-cleaner-ui",
-//     title: "5 Modern CSS Tricks for Cleaner UI",
-//     excerpt:
-//       "From :has() to container queries, modern CSS removes a surprising amount of JavaScript. Here are five techniques worth adopting today.",
-//     category: "css",
-//     tags: ["css", "frontend", "tips"],
-//     featuredImage: null,
-//     content: `Modern CSS keeps quietly absorbing things we used to reach for JavaScript to
-// do. Here are five favourites.
+- **Vanilla CSS components** keep all styling in a stylesheet or a \`<style>\`
+  block. They are framework-free and easy to read — ideal when you are not
+  already using a utility framework. The
+  [Dual Ring Spinner](/component/pure-css-spinner) and the
+  [Glowing Gradient Button](/component/glowing-gradient-button) are pure-CSS
+  examples.
+- **Tailwind CSS components** style elements with utility classes directly in
+  the markup. They are quick to adapt if your project already uses Tailwind —
+  see the [Tailwind Feature Card](/component/tailwind-feature-card).
 
-// ## 1. The \`:has()\` parent selector
+Neither is objectively better. Pick the one that matches your project so you
+paste less and ship sooner.
 
-// Style a card differently when it contains an image — no extra class needed:
+## The CSS components developers reach for most
 
-// \`\`\`css
-// .card:has(img) { padding-top: 0; }
-// \`\`\`
+A handful of UI elements show up in almost every project. These are the ones
+worth bookmarking:
 
-// ## 2. \`clamp()\` for fluid type
+- **Buttons** — the most reused element on the web. A solid set of
+  [CSS buttons](/component?category=buttons) with proper hover and active
+  states saves time on every single page.
+- **Loaders and spinners** — a
+  [pure-CSS loading spinner](/component/pure-css-spinner) gives users instant
+  feedback without shipping a JavaScript animation library.
+- **Cards** — pricing tables, feature blocks, and product tiles. The
+  [Glassmorphism Pricing Card](/component/glassmorphism-pricing-card) is a
+  copy-paste starting point.
+- **Form controls** — a
+  [floating-label input](/component/floating-label-input) and an
+  [animated toggle switch](/component/animated-toggle-switch) that look modern
+  out of the box.
+- **Accordions and toasts** — an
+  [accessible accordion](/component/accessible-accordion) and a
+  [slide-in toast notification](/component/toast-notification) cover two of the
+  most common interactive patterns.
 
-// \`\`\`css
-// h1 { font-size: clamp(1.8rem, 4vw, 3.2rem); }
-// \`\`\`
+Browse the full set on the [components page](/component) and filter by category.
 
-// One line replaces a stack of media queries.
+## How to use a component from CodeHarem
 
-// ## 3. Container queries
+1. Open any component and switch to the **Preview** tab to see it running live.
+2. Copy the **HTML**, **CSS**, and — if present — **JavaScript** from the code
+   tabs.
+3. Paste the markup into your page and the CSS into your stylesheet, or keep
+   them together in a single file.
+4. Adjust the colours, border radius, and spacing to fit your brand. Every
+   snippet is standard CSS, so there is nothing new to learn.
 
-// Components can respond to **their container** instead of the viewport, which is
-// exactly what reusable UI wants.
+Prefer to build from scratch? The [CodeHarem sandbox](/create) is a live
+HTML, CSS, and JavaScript editor with an instant preview, and you can download
+your work as a standalone HTML file.
 
-// ## 4. \`accent-color\`
+## Why copy-paste components are good for performance
 
-// Theme checkboxes and radios with a single property:
+Framework component libraries often pull in megabytes of JavaScript you never
+use. A plain HTML and CSS snippet ships only the markup and styles you actually
+paste — which means smaller pages, faster loads, and better Core Web Vitals.
+For a static site or a marketing page, that difference is real and measurable.
 
-// \`\`\`css
-// input { accent-color: #429872; }
-// \`\`\`
+## FAQ
 
-// ## 5. \`aspect-ratio\`
+### Are the components on CodeHarem free to use?
 
-// No more padding-top hacks for responsive embeds:
+Yes. Every HTML and CSS component on CodeHarem is free to copy, paste, and use
+in both personal and commercial projects.
 
-// \`\`\`css
-// .thumb { aspect-ratio: 16 / 9; }
-// \`\`\`
+### Do I need React or any framework to use them?
 
-// Adopt these and watch your stylesheets shrink.`,
-//     views: 2675,
-//     createdAt: "2025-05-19T09:30:00.000Z",
-//     updatedAt: "2025-05-19T09:30:00.000Z",
-//     author: TEAM,
-//   },
-//   {
-//     id: "b3",
-//     slug: "anatomy-of-a-great-component",
-//     title: "The Anatomy of a Great UI Component",
-//     excerpt:
-//       "Good components are accessible, self-contained, and easy to drop in. Here's the checklist we use when reviewing submissions.",
-//     category: "design",
-//     tags: ["design", "accessibility", "ux"],
-//     featuredImage: null,
-//     content: `A component is more than how it looks. The best ones are a pleasure to reuse.
-// Here is the checklist we keep coming back to.
+No. The components are plain HTML and CSS, so they work in any project — static
+sites, React, Vue, WordPress, or anything that renders HTML.
 
-// ## Self-contained
+### What is the difference between the CSS and Tailwind versions?
 
-// It should work when pasted into an empty file. No hidden global styles, no
-// assumed reset beyond the obvious.
+Vanilla CSS components keep their styles in a stylesheet, while Tailwind CSS
+components use utility classes directly in the markup. Use whichever matches
+your project.
 
-// ## Accessible by default
+### Can I edit a component before using it?
 
-// - Real, focusable elements (\`button\`, \`input\`, \`label\`).
-// - Visible focus states.
-// - Sufficient colour contrast.
-
-// ## Responsive
-
-// It should not break at 320px or look lost at 1440px. Fluid units and sensible
-// max-widths go a long way.
-
-// ## Honest motion
-
-// Animation should clarify, not distract. Keep it short, and respect
-// \`prefers-reduced-motion\` when it matters.
-
-// Hit these four and you have something people will actually want to use.`,
-//     views: 1402,
-//     createdAt: "2025-05-12T13:15:00.000Z",
-//     updatedAt: "2025-05-12T13:15:00.000Z",
-//     author: TEAM,
-//   },
+Yes. Open the [sandbox](/create) to edit the HTML, CSS, and JavaScript live with
+an instant preview, then copy or download the standalone result.`,
+    views: 0,
+    createdAt: "2026-06-18T10:00:00.000Z",
+    updatedAt: "2026-06-18T10:00:00.000Z",
+    author: TEAM,
+  },
 ];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────

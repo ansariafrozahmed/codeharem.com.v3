@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { getBlogBySlug, getBlogSlugs } from "@/content/blogs";
 import BlogContent from "./BlogContent";
-import { buildMetadata, getBlogPostJsonLd } from "@/config/seo";
+import { buildMetadata, getBlogPostJsonLd, getFaqJsonLd } from "@/config/seo";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -58,6 +58,14 @@ export default async function BlogDetailPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {blog.faq && blog.faq.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(getFaqJsonLd(blog.faq)),
+          }}
+        />
+      )}
       {/* Breadcrumb */}
       <nav className="mb-8 flex items-center gap-2 text-sm text-gray-500">
         <Link
