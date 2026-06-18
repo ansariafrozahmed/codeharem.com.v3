@@ -137,8 +137,10 @@ export function getWebsiteJsonLd() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: siteConfig.name,
+    alternateName: ["Code Harem", "codeharem", "codeharem.com"],
     url: siteConfig.url,
     description: siteConfig.description,
+    publisher: { "@id": `${siteConfig.url}/#organization` },
     potentialAction: {
       "@type": "SearchAction",
       target: {
@@ -154,9 +156,16 @@ export function getOrganizationJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": `${siteConfig.url}/#organization`,
     name: siteConfig.name,
+    alternateName: "Code Harem",
     url: siteConfig.url,
-    logo: `${siteConfig.url}/logo.webp`,
+    description: siteConfig.description,
+    logo: {
+      "@type": "ImageObject",
+      url: `${siteConfig.url}/logo.webp`,
+    },
+    sameAs: [`https://twitter.com/${siteConfig.twitterHandle.replace("@", "")}`],
   };
 }
 

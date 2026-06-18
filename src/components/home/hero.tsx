@@ -42,8 +42,9 @@ const HomeHero = () => {
             Playground
           </h1>
           <p className="text-sm sm:text-base font-light text-gray-300  max-w-xl">
-            Join a vibrant community where developers showcase creativity,
-            contribute to open-source UI, and grow together.
+            <strong className="font-semibold text-white">CodeHarem</strong> is a
+            community code hub where developers browse, build, and share
+            open-source UI components — buttons, cards, loaders, and more.
           </p>
           <form onSubmit={HandleSearch}>
             <div className=" max-w-md hover:scale-105 transition-all ease-in-out duration-200">

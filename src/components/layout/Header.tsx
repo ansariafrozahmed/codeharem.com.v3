@@ -28,11 +28,11 @@ export default function Header() {
       <div className="mainContainer flex h-16 items-center justify-between">
         {/* Left: Logo + Desktop nav */}
         <div className="flex items-center gap-14">
-          <Link href="/" className="block">
+          <Link href="/" className="block" aria-label="CodeHarem home">
             <Image
               src="/logo.webp"
               className="w-32 h-auto"
-              alt="Logo"
+              alt="CodeHarem"
               priority
               height={100}
               width={600}
