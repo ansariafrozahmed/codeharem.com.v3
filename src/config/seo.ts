@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 const baseUrl =
-  process.env.NEXT_PUBLIC_BASE_URL || "https://www.codeharem.com";
+  process.env.NEXT_PUBLIC_BASE_URL || "https://codeharem.com";
 
 // ─── Core Site Config ────────────────────────────────────────────────────────
 export const siteConfig = {
