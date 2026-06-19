@@ -101,7 +101,7 @@ export function buildMetadata(options: {
     authors: [{ name: siteConfig.author }],
     creator: siteConfig.author,
     ...(path && { alternates: { canonical: url } }),
-    ...(noIndex && { robots: { index: false, follow: false } }),
+    ...(noIndex && { robots: { index: false, follow: true } }),
     openGraph: {
       type: ogType,
       locale: siteConfig.locale,

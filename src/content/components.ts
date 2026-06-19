@@ -7,6 +7,8 @@
 // helpers sort by `createdAt`).
 // ─────────────────────────────────────────────────────────────────────────────
 
+import { categoryBrowseLabel } from "@/constants/navigation";
+
 export interface ComponentAuthor {
   name: string;
   avatar: string | null;
@@ -333,6 +335,22 @@ export function getFeaturedComponents(limit = 4): ComponentData[] {
 
 export function getComponentCountByCategory(category: string): number {
   return components.filter((c) => c.category === category).length;
+}
+
+// Categories that currently have at least one component — used to avoid
+// indexing/linking empty (thin) category pages.
+export function getNonEmptyCategories(): string[] {
+  return [...new Set(components.map((c) => c.category))];
+}
+
+// Browse links for the homepage + footer, limited to categories with content.
+export function getBrowseCategories(): { label: string; href: string }[] {
+  return getNonEmptyCategories()
+    .sort((a, b) => getComponentCountByCategory(b) - getComponentCountByCategory(a))
+    .map((c) => ({
+      label: categoryBrowseLabel(c),
+      href: `/component/category/${c}`,
+    }));
 }
 
 // Components related to the given one: same category first, then most popular

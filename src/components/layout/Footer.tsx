@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BROWSE_CATEGORIES } from "@/constants/navigation";
+import { getBrowseCategories } from "@/content/components";
 
 const RESOURCE_LINKS = [
   { label: "All Components", href: "/component" },
@@ -10,6 +10,8 @@ const RESOURCE_LINKS = [
 
 export default function Footer() {
   const year = 2026;
+  const browse = getBrowseCategories();
+  const half = Math.ceil(browse.length / 2);
 
   return (
     <footer className="mt-20 border-t border-[#222] bg-[#141414]">
@@ -36,7 +38,7 @@ export default function Footer() {
               Browse Components
             </h2>
             <ul className="space-y-2">
-              {BROWSE_CATEGORIES.slice(0, 6).map((c) => (
+              {browse.slice(0, half).map((c) => (
                 <li key={c.href}>
                   <Link
                     href={c.href}
@@ -55,7 +57,7 @@ export default function Footer() {
               More Categories
             </h2>
             <ul className="space-y-2">
-              {BROWSE_CATEGORIES.slice(6).map((c) => (
+              {browse.slice(half).map((c) => (
                 <li key={c.href}>
                   <Link
                     href={c.href}

@@ -1,8 +1,7 @@
 import Link from "next/link";
 import HomeHero from "@/components/home/hero";
 import ComponentCard from "@/components/component/ComponentCard";
-import { getFeaturedComponents } from "@/content/components";
-import { BROWSE_CATEGORIES } from "@/constants/navigation";
+import { getFeaturedComponents, getBrowseCategories } from "@/content/components";
 import { getFaqJsonLd } from "@/config/seo";
 
 const HOME_FAQ = [
@@ -30,6 +29,7 @@ const HOME_FAQ = [
 
 export default function Home() {
   const featured = getFeaturedComponents(8);
+  const browse = getBrowseCategories();
 
   return (
     <div>
@@ -98,7 +98,7 @@ export default function Home() {
           Free copy-paste CSS components, organised by what you need.
         </p>
         <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-          {BROWSE_CATEGORIES.map((c) => (
+          {browse.map((c) => (
             <Link
               key={c.href}
               href={c.href}
@@ -137,7 +137,7 @@ export default function Home() {
               Browse <Link href="/component/category/buttons" className="text-accent hover:underline">CSS buttons</Link>,{" "}
               <Link href="/component/category/card" className="text-accent hover:underline">cards</Link>,{" "}
               <Link href="/component/category/spinner" className="text-accent hover:underline">loaders and spinners</Link>,{" "}
-              <Link href="/component/category/form" className="text-accent hover:underline">forms</Link>{" "}
+              <Link href="/component/category/input" className="text-accent hover:underline">inputs</Link>{" "}
               and more, each with a live preview.
             </p>
             <p>

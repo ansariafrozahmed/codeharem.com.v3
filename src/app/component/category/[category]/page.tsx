@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { CATEGORIES } from "@/constants";
-import { getComponents } from "@/content/components";
+import { CATEGORIES, CATEGORY_NOUN } from "@/constants/navigation";
+import { getComponents, getComponentCountByCategory } from "@/content/components";
 import ComponentGrid from "../../ComponentGrid";
 import { buildMetadata, getBreadcrumbJsonLd } from "@/config/seo";
 
@@ -10,30 +10,8 @@ interface PageProps {
   params: Promise<{ category: string }>;
 }
 
-// Friendly plural labels for headings/titles (keyword-aligned with search terms).
-const CATEGORY_LABEL: Record<string, string> = {
-  buttons: "Buttons",
-  accordion: "Accordions",
-  dropdown: "Dropdowns",
-  form: "Forms",
-  modal: "Modals",
-  tooltip: "Tooltips",
-  card: "Cards",
-  tabs: "Tabs",
-  pagination: "Pagination",
-  input: "Inputs",
-  slider: "Sliders",
-  switch: "Switches",
-  checkbox: "Checkboxes",
-  radio: "Radio Buttons",
-  toast: "Toasts",
-  alert: "Alerts",
-  spinner: "Spinners & Loaders",
-  other: "Other",
-};
-
 function labelFor(category: string) {
-  return CATEGORY_LABEL[category] ?? category;
+  return CATEGORY_NOUN[category] ?? category;
 }
 
 function isOther(category: string) {
@@ -72,6 +50,8 @@ export async function generateMetadata({
     title: titleFor(category),
     description: descriptionFor(category),
     path: `/component/category/${category}`,
+    // Keep empty category pages out of the index until they have components.
+    noIndex: getComponentCountByCategory(category) === 0,
   });
 }
 

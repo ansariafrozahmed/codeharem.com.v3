@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
-import { CATEGORIES } from "@/constants";
 import { siteConfig } from "@/config/seo";
-import { getAllComponents } from "@/content/components";
+import { getAllComponents, getNonEmptyCategories } from "@/content/components";
 import { getAllBlogs } from "@/content/blogs";
 
 const BASE_URL = siteConfig.url;
@@ -40,11 +39,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  const categoryPages: MetadataRoute.Sitemap = CATEGORIES.map((cat) => ({
-    url: `${BASE_URL}/component/category/${cat}`,
-    changeFrequency: "weekly" as const,
-    priority: 0.7,
-  }));
+  const categoryPages: MetadataRoute.Sitemap = getNonEmptyCategories().map(
+    (cat) => ({
+      url: `${BASE_URL}/component/category/${cat}`,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    }),
+  );
 
   const componentPages: MetadataRoute.Sitemap = components.map((c) => ({
     url: `${BASE_URL}/component/${c.slug}`,
