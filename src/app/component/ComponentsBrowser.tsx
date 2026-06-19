@@ -161,7 +161,7 @@ export default function ComponentsBrowser() {
         {CATEGORIES.map((cat) => (
           <Link
             key={cat}
-            href={`/component?category=${cat}${search ? `&search=${search}` : ""}`}
+            href={`/component/category/${cat}`}
             className={`rounded-full px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
               category === cat
                 ? "bg-accent text-white"
@@ -194,7 +194,7 @@ export default function ComponentsBrowser() {
             {CATEGORIES.map((cat) => (
               <Link
                 key={cat}
-                href={`/component?category=${cat}${search ? `&search=${search}` : ""}`}
+                href={`/component/category/${cat}`}
                 className={`rounded-lg px-3 py-2 text-sm font-medium capitalize transition-colors ${
                   category === cat
                     ? "bg-accent/10 text-accent"

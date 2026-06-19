@@ -45,19 +45,19 @@ export const pagesSeo = {
     description: siteConfig.description,
   },
   components: {
-    title: "UI Components - CodeHarem",
+    title: "Free UI Components — Copy-Paste HTML & CSS",
     description:
-      "Browse community-built UI components. Buttons, modals, forms, cards, and more — built with Tailwind CSS and vanilla CSS.",
+      "Browse free, copy-paste UI components — buttons, cards, loaders, modals, forms and more — built with HTML, CSS and Tailwind CSS. Live preview and one-click copy.",
   },
   blog: {
-    title: "Blog - CodeHarem",
+    title: "Blog — Web Development, CSS & UI Guides",
     description:
-      "Read articles about web development, UI design, CSS tricks, and more from the CodeHarem community.",
+      "Practical articles on web development, UI design, CSS tricks and frontend tips from CodeHarem.",
   },
   playground: {
-    title: "Playground - CodeHarem",
+    title: "Code Playground — Live HTML, CSS & JS Editor",
     description:
-      "Experiment with HTML, CSS, and JavaScript in real-time. Build and preview UI components instantly.",
+      "A free online HTML, CSS and JavaScript playground. Write code and preview your UI components instantly in the browser.",
   },
   login: {
     title: "Login - CodeHarem",
@@ -215,6 +215,19 @@ export function getFaqJsonLd(items: { question: string; answer: string }[]) {
         "@type": "Answer",
         text: item.answer,
       },
+    })),
+  };
+}
+
+export function getBreadcrumbJsonLd(items: { name: string; path: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: `${siteConfig.url}${item.path}`,
     })),
   };
 }

@@ -3,7 +3,12 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { getBlogBySlug, getBlogSlugs } from "@/content/blogs";
 import BlogContent from "./BlogContent";
-import { buildMetadata, getBlogPostJsonLd, getFaqJsonLd } from "@/config/seo";
+import {
+  buildMetadata,
+  getBlogPostJsonLd,
+  getFaqJsonLd,
+  getBreadcrumbJsonLd,
+} from "@/config/seo";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -21,7 +26,7 @@ export async function generateMetadata({
   if (!blog) return { title: "Blog Post Not Found" };
 
   return buildMetadata({
-    title: `${blog.title} - CodeHarem Blog`,
+    title: blog.title,
     description: blog.excerpt || `Read "${blog.title}" on CodeHarem Blog`,
     path: `/blog/${slug}`,
     ogType: "article",
@@ -52,11 +57,20 @@ export default async function BlogDetailPage({ params }: PageProps) {
     tags: blog.tags,
   });
 
+  const breadcrumb = getBreadcrumbJsonLd([
+    { name: "Blog", path: "/blog" },
+    { name: blog.title, path: `/blog/${slug}` },
+  ]);
+
   return (
     <div className="mainContainer py-8 md:py-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
       />
       {blog.faq && blog.faq.length > 0 && (
         <script

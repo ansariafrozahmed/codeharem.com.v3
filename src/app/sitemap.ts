@@ -41,8 +41,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   const categoryPages: MetadataRoute.Sitemap = CATEGORIES.map((cat) => ({
-    url: `${BASE_URL}/component?category=${cat}`,
-    changeFrequency: "daily" as const,
+    url: `${BASE_URL}/component/category/${cat}`,
+    changeFrequency: "weekly" as const,
     priority: 0.7,
   }));
 

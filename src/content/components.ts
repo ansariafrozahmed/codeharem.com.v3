@@ -331,6 +331,24 @@ export function getFeaturedComponents(limit = 4): ComponentData[] {
   return [...components].sort((a, b) => b.likes - a.likes).slice(0, limit);
 }
 
+export function getComponentCountByCategory(category: string): number {
+  return components.filter((c) => c.category === category).length;
+}
+
+// Components related to the given one: same category first, then most popular
+// others — used for internal linking on the detail page.
+export function getRelatedComponents(slug: string, limit = 3): ComponentData[] {
+  const current = getComponentBySlug(slug);
+  if (!current) return [];
+  const sameCategory = components
+    .filter((c) => c.slug !== slug && c.category === current.category)
+    .sort((a, b) => b.likes - a.likes);
+  const others = components
+    .filter((c) => c.slug !== slug && c.category !== current.category)
+    .sort((a, b) => b.likes - a.likes);
+  return [...sameCategory, ...others].slice(0, limit);
+}
+
 export function getComponents(options?: {
   category?: string;
   search?: string;

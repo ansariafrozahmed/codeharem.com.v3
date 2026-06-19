@@ -4,9 +4,15 @@ import type { Metadata } from "next";
 import {
   getComponentBySlug,
   getComponentSlugs,
+  getRelatedComponents,
 } from "@/content/components";
 import ComponentDetailClient from "./ComponentDetailClient";
-import { buildMetadata, getComponentJsonLd } from "@/config/seo";
+import ComponentGrid from "../ComponentGrid";
+import {
+  buildMetadata,
+  getComponentJsonLd,
+  getBreadcrumbJsonLd,
+} from "@/config/seo";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -21,9 +27,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const component = getComponentBySlug(slug);
   if (!component) return { title: "Component Not Found" };
 
+  const tech = component.styling === "tailwind" ? "Tailwind CSS" : "CSS";
   return buildMetadata({
-    title: `${component.title} - CodeHarem`,
-    description: `A ${component.category} component built with ${component.styling === "tailwind" ? "Tailwind CSS" : "CSS"} by ${component.author.name}`,
+    title: `${component.title} — Free ${component.category} component (HTML & ${tech})`,
+    description: `Copy-paste the free "${component.title}" ${component.category} component built with HTML and ${tech}. Live preview and one-click copy on CodeHarem.`,
     path: `/component/${slug}`,
     ogType: "article",
   });
@@ -44,11 +51,26 @@ export default async function ComponentDetailPage({ params }: PageProps) {
     author: component.author,
   });
 
+  const breadcrumb = getBreadcrumbJsonLd([
+    { name: "Components", path: "/component" },
+    {
+      name: component.category,
+      path: `/component/category/${component.category}`,
+    },
+    { name: component.title, path: `/component/${slug}` },
+  ]);
+
+  const related = getRelatedComponents(slug, 3);
+
   return (
     <div className="mainContainer py-8 md:py-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
       />
       {/* Breadcrumb */}
       <nav className="mb-6 flex items-center gap-2 text-sm text-gray-500">
@@ -59,7 +81,7 @@ export default async function ComponentDetailPage({ params }: PageProps) {
           <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
         <Link
-          href={`/component?category=${component.category}`}
+          href={`/component/category/${component.category}`}
           className="capitalize hover:text-white transition-colors"
         >
           {component.category}
@@ -129,6 +151,24 @@ export default async function ComponentDetailPage({ params }: PageProps) {
 
       {/* Client part: Preview + Code tabs */}
       <ComponentDetailClient component={component} />
+
+      {/* Related components — internal linking + discovery */}
+      {related.length > 0 && (
+        <section className="mt-14">
+          <div className="mb-6 flex items-end justify-between">
+            <h2 className="text-xl font-semibold text-white">
+              Related components
+            </h2>
+            <Link
+              href={`/component/category/${component.category}`}
+              className="text-sm text-gray-400 transition-colors hover:text-accent"
+            >
+              More {component.category} components →
+            </Link>
+          </div>
+          <ComponentGrid components={related} />
+        </section>
+      )}
     </div>
   );
 }
